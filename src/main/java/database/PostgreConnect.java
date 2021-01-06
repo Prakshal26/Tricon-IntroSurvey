@@ -29,10 +29,11 @@ public class PostgreConnect {
 
         int id = 0;
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT into country (name,alt_heading)" + "VALUES (?,?)",Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement("INSERT into country (name,xml_id,alt_heading)" + "VALUES (?,?,?)",Statement.RETURN_GENERATED_KEYS);
 
             int i = 1;
             statement.setString(i++, countryList.getName());
+            statement.setString(i++, countryList.getXmlId());
             statement.setString(i++, countryList.getAltHeading());
 
             statement.execute();
@@ -57,10 +58,9 @@ public class PostgreConnect {
 
         int id = 0;
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT into country_data (entry_id,heading,description, parent_id, country_id)" + "VALUES (?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement("INSERT into country_data (heading,description, parent_id, country_id)" + "VALUES (?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 
             int i = 1;
-            statement.setInt(i++, countryData.getEntryId());
             statement.setString(i++, countryData.getHeading());
             statement.setString(i++, countryData.getDescription());
             statement.setInt(i++, countryData.getParent_id());

@@ -20,7 +20,7 @@ public class IntroSurveyParser {
             File dir = new File("C:\\Users\\lenovo\\IdeaProjects\\EuropaDbWork\\XML_Files\\Test");
 
             File [] files = dir.listFiles();
-            int inserted_id = 0;
+            int insertedId = 0;
             int file_count =1;
             for(File file : files) {
                 if(file.isFile() && file.getName().endsWith(".xml")) {
@@ -29,7 +29,8 @@ public class IntroSurveyParser {
                     file_count++;
                     doc.getDocumentElement().normalize();
                     Node entryNode = doc.getDocumentElement();
-                    ElementParse.parseFiles(doc);
+                   insertedId = ElementParse.parseFiles(doc, insertedId);
+                    System.out.println(insertedId);
                 }
             }
         } catch (Exception e) {

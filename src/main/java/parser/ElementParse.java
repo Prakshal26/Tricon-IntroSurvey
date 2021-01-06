@@ -11,20 +11,22 @@ import pojo.CountryList;
 
 public class ElementParse {
 
-    static void match(Element element, CountryList countryList, int countryId) {
+    static int match(Element element, CountryList countryList,int parentId, int countryId) {
 
         String tagName = element.getTagName();
+        int insertedId = 0;
         switch (tagName) {
 
             case "IS-SECTION":
-                IsSectionHandler.handleIsSection(element, 0, countryId);
+                insertedId = IsSectionHandler.handleIsSection(element, parentId, countryId);
                 break;
             default:
                 break;
         }
+        return insertedId;
     }
 
-    static void parseFiles(Document doc) {
+    static int parseFiles(Document doc, int insertedId) {
 
         doc.getDocumentElement().normalize();
         Node entryNode = doc.getDocumentElement();
@@ -35,7 +37,10 @@ public class ElementParse {
         Element entryElement = (Element) entryNode;
 
         if (entryElement.hasAttribute("ISO")) {
-            countryList.setAltHeading(entryElement.getAttribute("ISO"));
+            countryList.setName(entryElement.getAttribute("ISO"));
+        }
+        if (entryElement.hasAttribute("ID")) {
+            countryList.setXmlId((entryElement.getAttribute("ID")).toLowerCase());
         }
 
         for (int j=0;j<nodeList.getLength();j++) {
@@ -51,13 +56,15 @@ public class ElementParse {
         //Insert Country and Get id.
         int countryId = PostgreConnect.insertCountryList(countryList);
 
+
         for (int i=0; i<nodeList.getLength();i++) {
             Node nNode = nodeList.item(i);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element)nNode;
-                ElementParse.match(element, countryList, countryId);
+                insertedId = ElementParse.match(element, countryList,insertedId, countryId);
             }
         }
+        return  insertedId;
     }
 }
 

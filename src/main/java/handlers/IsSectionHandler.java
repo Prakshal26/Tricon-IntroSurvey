@@ -97,7 +97,7 @@ public class IsSectionHandler {
                     if (subElement.hasAttribute("REF")) {
                         stringBuilder.append(" ");
                         stringBuilder.append("<a href =\"https://www.europaworld.com/entry/");
-                        stringBuilder.append(subElement.getAttribute("REF"));
+                        stringBuilder.append((subElement.getAttribute("REF")).toLowerCase());
                         stringBuilder.append("\">");
                         stringBuilder.append(subElement.getTextContent());
                         stringBuilder.append("</a>");
@@ -120,9 +120,10 @@ public class IsSectionHandler {
         }
     }
 
-    public static void handleIsSection(Element element, int parentId, int countryId) {
+    public static int handleIsSection(Element element, int parentId, int countryId) {
 
         int insertedId = 0;
+        int maxInsertedId = -1;
         boolean inserted = false;
         NodeList nodeList = element.getChildNodes();
         StringBuilder stringBuilder = new StringBuilder();
@@ -150,6 +151,9 @@ public class IsSectionHandler {
                     countryData.setCountry_id(countryId);
                     if (!inserted) {
                         insertedId = PostgreConnect.insertCountryData(countryData);
+                        if (maxInsertedId< insertedId) {
+                            maxInsertedId = insertedId;
+                        }
                         inserted = true;
                     }
                    handleIsSection(subElement, insertedId, countryId);
@@ -161,6 +165,10 @@ public class IsSectionHandler {
             countryData.setParent_id(parentId);
             countryData.setCountry_id(countryId);
             insertedId = PostgreConnect.insertCountryData(countryData);
+            if (maxInsertedId< insertedId) {
+                maxInsertedId = insertedId;
+            }
         }
+        return maxInsertedId;
     }
 }

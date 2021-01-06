@@ -2,19 +2,11 @@ package pojo;
 
 public class CountryData {
 
-    int entryId;
+
     String heading;
     String description;
     int parent_id;
     int country_id;
-
-    public int getEntryId() {
-        return entryId;
-    }
-
-    public void setEntryId(int entryId) {
-        this.entryId = entryId;
-    }
 
     public String getHeading() {
         return heading;

@@ -3,6 +3,7 @@ package pojo;
 public class CountryList {
 
     String name;
+    String xmlId;
     String altHeading;
 
     public String getName() {
@@ -11,6 +12,14 @@ public class CountryList {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getXmlId() {
+        return xmlId;
+    }
+
+    public void setXmlId(String xmlId) {
+        this.xmlId = xmlId;
     }
 
     public String getAltHeading() {
@@ -24,6 +33,5 @@ public class CountryList {
         } else {
             this.altHeading = this.altHeading + altHeading;
         }
-        this.altHeading = altHeading;
     }
 }
