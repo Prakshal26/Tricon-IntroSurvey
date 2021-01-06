@@ -1,6 +1,6 @@
 package pojo;
 
-public class Country {
+public class CountryData {
 
     int entryId;
     String heading;

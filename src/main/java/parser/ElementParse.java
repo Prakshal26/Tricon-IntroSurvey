@@ -6,31 +6,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import pojo.Country;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import pojo.CountryData;
+import pojo.CountryList;
 
 public class ElementParse {
 
-    static void match(Element element, Country country, StringBuilder generalSectionBuilder, StringBuilder introductionBuilder, StringBuilder chronListBuilder) {
+    static void match(Element element, CountryList countryList, int countryId) {
 
         String tagName = element.getTagName();
         switch (tagName) {
 
-            case "HEADING":
-                country.setHeading(element.getTextContent());
-                break;
-            case "P":
-                introductionBuilder.append("<p>");
-             //   GeneralSection.handleParagraph(element.getChildNodes(),introductionBuilder);
-                introductionBuilder.append("</p>");
-                break;
             case "IS-SECTION":
-                IsSectionHandler.handleIsSection(element, 0);
-                generalSectionBuilder.append("<br>");
+                IsSectionHandler.handleIsSection(element, 0, countryId);
                 break;
             default:
                 break;
@@ -42,20 +29,33 @@ public class ElementParse {
         doc.getDocumentElement().normalize();
         Node entryNode = doc.getDocumentElement();
 
-        Country country = new Country();
+        CountryList countryList = new CountryList();
         NodeList nodeList = entryNode.getChildNodes();
 
         Element entryElement = (Element) entryNode;
 
-        StringBuilder generalSectionBuilder = new StringBuilder();
-        StringBuilder introductionBuilder = new StringBuilder();
-        StringBuilder chronListBuilder = new StringBuilder();
+        if (entryElement.hasAttribute("ISO")) {
+            countryList.setAltHeading(entryElement.getAttribute("ISO"));
+        }
+
+        for (int j=0;j<nodeList.getLength();j++) {
+            Node altHead = nodeList.item(j);
+            if (altHead.getNodeType() == Node.ELEMENT_NODE) {
+                Element altHeadElement = (Element) altHead;
+                if (altHeadElement.getTagName().equalsIgnoreCase("ALT-HEADING")) {
+                    countryList.setAltHeading(altHeadElement.getTextContent());
+                }
+            }
+        }
+
+        //Insert Country and Get id.
+        int countryId = PostgreConnect.insertCountryList(countryList);
 
         for (int i=0; i<nodeList.getLength();i++) {
             Node nNode = nodeList.item(i);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element)nNode;
-                ElementParse.match(element, country, generalSectionBuilder, introductionBuilder, chronListBuilder);
+                ElementParse.match(element, countryList, countryId);
             }
         }
     }

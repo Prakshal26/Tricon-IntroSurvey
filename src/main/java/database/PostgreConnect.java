@@ -1,6 +1,7 @@
 package database;
 
-import pojo.Country;
+import pojo.CountryData;
+import pojo.CountryList;
 
 import java.sql.*;
 
@@ -24,18 +25,46 @@ public class PostgreConnect {
         return connection;
     }
 
-    public static int insertCountry(Country country) {
+    public static int insertCountryList(CountryList countryList) {
 
         int id = 0;
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT into country_data (entry_id,heading, description, parent_id, country_id)" + "VALUES (?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement("INSERT into country (name,alt_heading)" + "VALUES (?,?)",Statement.RETURN_GENERATED_KEYS);
 
             int i = 1;
-            statement.setInt(i++, country.getEntryId());
-            statement.setString(i++, country.getHeading());
-            statement.setString(i++, country.getDescription());
-            statement.setInt(i++, country.getParent_id());
-            statement.setInt(i++, country.getCountry_id());
+            statement.setString(i++, countryList.getName());
+            statement.setString(i++, countryList.getAltHeading());
+
+            statement.execute();
+
+            ResultSet rs = statement.getGeneratedKeys();
+
+            if(rs.next()){
+                id=rs.getInt(1);
+            }
+            statement.close();
+            return id;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        return id;
+    }
+
+    public static int insertCountryData(CountryData countryData) {
+
+        int id = 0;
+        try {
+            PreparedStatement statement = connection.prepareStatement("INSERT into country_data (entry_id,heading,description, parent_id, country_id)" + "VALUES (?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+
+            int i = 1;
+            statement.setInt(i++, countryData.getEntryId());
+            statement.setString(i++, countryData.getHeading());
+            statement.setString(i++, countryData.getDescription());
+            statement.setInt(i++, countryData.getParent_id());
+            statement.setInt(i++, countryData.getCountry_id());
             statement.execute();
 
             ResultSet rs = statement.getGeneratedKeys();
