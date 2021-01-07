@@ -36,6 +36,5 @@ public class IntroSurveyParser {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
