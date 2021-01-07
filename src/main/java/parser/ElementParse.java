@@ -11,7 +11,7 @@ import pojo.CountryList;
 
 public class ElementParse {
 
-    static int match(Element element, CountryList countryList,int parentId, int countryId) {
+    static int match(Element element, int parentId, int countryId) {
 
         String tagName = element.getTagName();
         int insertedId = 0;
@@ -61,7 +61,7 @@ public class ElementParse {
             Node nNode = nodeList.item(i);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element)nNode;
-                insertedId = ElementParse.match(element, countryList,insertedId, countryId);
+                insertedId = ElementParse.match(element,insertedId, countryId);
             }
         }
         return  insertedId;

@@ -17,7 +17,7 @@ public class IntroSurveyParser {
             PostgreConnect.connect();
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            File dir = new File("C:\\Users\\lenovo\\IdeaProjects\\EuropaDbWork\\XML_Files\\Test");
+            File dir = new File("C:\\Users\\lenovo\\IdeaProjects\\EuropaDbWork\\XML_Files\\Intro-Survey");
 
             File [] files = dir.listFiles();
             int insertedId = 0;
@@ -30,7 +30,7 @@ public class IntroSurveyParser {
                     doc.getDocumentElement().normalize();
                     Node entryNode = doc.getDocumentElement();
                    insertedId = ElementParse.parseFiles(doc, insertedId);
-                    System.out.println(insertedId);
+
                 }
             }
         } catch (Exception e) {

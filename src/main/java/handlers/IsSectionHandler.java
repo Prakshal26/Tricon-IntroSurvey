@@ -76,6 +76,8 @@ public class IsSectionHandler {
 
     public static void handleParagraph(NodeList nodeList, StringBuilder stringBuilder) {
 
+        stringBuilder.append("<p>");
+
         for (int i=0;i<nodeList.getLength();i++) {
             Node node = nodeList.item(i);
             if (node.getNodeType()==Node.TEXT_NODE) {
@@ -118,6 +120,7 @@ public class IsSectionHandler {
                 }
             }
         }
+        stringBuilder.append("</p>");
     }
 
     public static int handleIsSection(Element element, int parentId, int countryId) {
